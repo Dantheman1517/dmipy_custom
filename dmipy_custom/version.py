@@ -26,16 +26,17 @@ CLASSIFIERS = ["Development Status :: 3 - Alpha",
                "Topic :: Scientific/Engineering"]
 
 # Description should be a one-liner:
-description = "dmipy: diffusion microstructure imaging in python"
+description = "dmipy_custom: diffusion microstructure imaging in python"
 # Long description will go up on the pypi page
 long_description_content_type = 'text/markdown'
 
-NAME = "dmipy"
+NAME = "dmipy_custom"
 MAINTAINER = "Rutger Fick"
 MAINTAINER_EMAIL = "fick.rutger@gmail.com"
 DESCRIPTION = description
 LONG_DESCRIPTION_CONTENT_TYPE = long_description_content_type
-URL = "https://github.com/AthenaEPI/dmipy"
+# URL = "https://github.com/AthenaEPI/dmipy"
+URL = "https://github.com/Dantheman1517/dmipy_custom"
 DOWNLOAD_URL = ""
 LICENSE = "MIT"
 AUTHOR = "Rutger Fick"

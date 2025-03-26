@@ -3,6 +3,7 @@ import pkg_resources
 from ..utils.utils import cart2mu
 import numpy as np
 from dipy.utils.optpkg import optional_package
+from autograd import elementwise_grad as egrad
 
 numba, have_numba, _ = optional_package("numba")
 
@@ -261,7 +262,11 @@ class Brute2FineOptimizer:
         E_model = self.model(self.acquisition_scheme, **parameters)
         E_diff = E_model - data
         objective = np.dot(E_diff, E_diff) / len(data)
-        return objective
+
+        dd_func = egrad(egrad(fixed_params_func))
+        dd_func_values = dd_func(x)
+        penalty = lambda_ * np.mean(dd_func_values ** 2)
+        return objective + dd_penalty
 
     def objective_function_vf_fixed(self, parameter_vector, data, vf):
         "The objective function if the volume fractions have been fixed."

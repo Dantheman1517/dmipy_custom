@@ -3,7 +3,6 @@ import pkg_resources
 from ..utils.utils import cart2mu
 import numpy as np
 from dipy.utils.optpkg import optional_package
-from autograd import elementwise_grad as egrad
 
 numba, have_numba, _ = optional_package("numba")
 
@@ -263,9 +262,22 @@ class Brute2FineOptimizer:
         E_diff = E_model - data
         objective = np.dot(E_diff, E_diff) / len(data)
 
-        dd_func = egrad(egrad(fixed_params_func))
-        dd_func_values = dd_func(x)
-        penalty = lambda_ * np.mean(dd_func_values ** 2)
+
+        def second_derivative_nonuniform(x, y):
+            n = len(x)
+            d2y = np.zeros_like(y)
+            for i in range(1, n-1):
+                h1 = x[i] - x[i-1]
+                h2 = x[i+1] - x[i]
+                d2y[i] = 2 / (h1 + h2) * ((y[i+1] - y[i]) / h2 - (y[i] - y[i-1]) / h1)
+            d2y[0] = d2y[1]
+            d2y[-1] = d2y[-2]
+            return d2y
+        dd_E_model = second_derivative_nonuniform(self.acquisition_scheme.bvalues, 
+                                                  E_model)        
+        lambda_ = 1 # hard coded, to be an argument in the future
+        dd_penalty = lambda_ * np.mean(dd_E_model ** 2)
+
         return objective + dd_penalty
 
     def objective_function_vf_fixed(self, parameter_vector, data, vf):

@@ -275,9 +275,12 @@ class Brute2FineOptimizer:
             return d2y
         dd_E_model = second_derivative_nonuniform(self.acquisition_scheme.bvalues, 
                                                   E_model)        
-        lambda_ = 1 # hard coded, to be an argument in the future
+        lambda_ = 1*(10**34) # hard coded, to be an argument in the future
         dd_penalty = lambda_ * np.mean(dd_E_model ** 2)
 
+        # print(objective, dd_penalty)
+
+        # return objective
         return objective + dd_penalty
 
     def objective_function_vf_fixed(self, parameter_vector, data, vf):

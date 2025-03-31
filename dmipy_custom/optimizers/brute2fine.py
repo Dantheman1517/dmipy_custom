@@ -275,7 +275,10 @@ class Brute2FineOptimizer:
             return d2y
         dd_E_model = second_derivative_nonuniform(self.acquisition_scheme.bvalues, 
                                                   E_model)        
-        lambda_ = 1*(10**34) # hard coded, to be an argument in the future
+        # lambda_ = 1*(10**34) # hard coded, to be an argument in the future
+        lambda_ = 1*(10**31) # hard coded, to be an argument in the future
+        # choose 10^34 for no better reason than to put it on a similar magnitude with 
+        # `objective` 
         dd_penalty = lambda_ * np.mean(dd_E_model ** 2)
 
         # print(objective, dd_penalty)
